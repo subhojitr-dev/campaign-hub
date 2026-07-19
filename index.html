@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Campaign Analytics Hub</title>
+<style>
+  :root {
+    --bg: #f4f6fb;
+    --bg-alt: #ffffff;
+    --ink: #131a2b;
+    --ink-soft: #4a5670;
+    --border: #dfe4ee;
+    --accent: #2a4a8c;
+    --accent-soft: #e8edfb;
+    --gold: #b8862f;
+    --shadow: 0 1px 3px rgba(20, 30, 60, 0.06), 0 8px 24px rgba(20, 30, 60, 0.06);
+    --radius: 16px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1220;
+      --bg-alt: #161d30;
+      --ink: #e9edf7;
+      --ink-soft: #a3adc4;
+      --border: #2a3350;
+      --accent: #7fa3ef;
+      --accent-soft: #1c2542;
+      --gold: #dcb15c;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1220; --bg-alt: #161d30; --ink: #e9edf7; --ink-soft: #a3adc4;
+    --border: #2a3350; --accent: #7fa3ef; --accent-soft: #1c2542; --gold: #dcb15c;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f6fb; --bg-alt: #ffffff; --ink: #131a2b; --ink-soft: #4a5670;
+    --border: #dfe4ee; --accent: #2a4a8c; --accent-soft: #e8edfb; --gold: #b8862f;
+    --shadow: 0 1px 3px rgba(20, 30, 60, 0.06), 0 8px 24px rgba(20, 30, 60, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px 64px; }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    padding: 56px 20px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-art { width: 168px; height: 168px; margin: 0 auto 8px; display: block; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.15;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.6;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  h2.section-title {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin: 48px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .card-icon {
+    flex: 0 0 auto;
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-icon svg { width: 24px; height: 24px; stroke: var(--accent); }
+  .card-body { flex: 1 1 240px; min-width: 0; }
+  .card-body h3 { margin: 0 0 4px; font-size: 17px; }
+  .card-body p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+  .card-actions { display: flex; gap: 10px; flex-wrap: wrap; flex: 0 0 auto; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--accent); color: #ffffff; }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-ghost { background: transparent; color: var(--accent); border-color: var(--border); }
+  .btn-ghost:hover { background: var(--accent-soft); }
+  .btn svg { width: 14px; height: 14px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 520px) {
+    .card { flex-direction: column; align-items: flex-start; }
+    .card-actions { width: 100%; }
+    .btn { flex: 1 1 auto; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="hero">
+    <svg class="hero-art" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="boxGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a5aa8"/>
+          <stop offset="100%" stop-color="#22366b"/>
+        </linearGradient>
+        <linearGradient id="slotGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#16203f"/>
+          <stop offset="100%" stop-color="#0c1226"/>
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-opacity="0.08" stroke-width="1.5"/>
+      <g opacity="0.55">
+        <circle cx="34" cy="46" r="2.6" fill="#c79a3f"/>
+        <circle cx="164" cy="52" r="2" fill="#c79a3f"/>
+        <circle cx="150" cy="150" r="2.4" fill="#c79a3f"/>
+        <circle cx="42" cy="150" r="1.8" fill="#c79a3f"/>
+        <circle cx="100" cy="26" r="1.8" fill="#c79a3f"/>
+      </g>
+      <ellipse cx="100" cy="163" rx="56" ry="8" fill="#000000" opacity="0.08"/>
+      <rect x="52" y="88" width="96" height="70" rx="6" fill="url(#boxGrad)"/>
+      <rect x="52" y="88" width="96" height="14" rx="4" fill="url(#slotGrad)"/>
+      <rect x="90" y="92" width="20" height="6" rx="3" fill="#0a0f20"/>
+      <path d="M60 96 L96 130 L150 78" fill="none" stroke="#e7c877" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M60 96 L96 130 L150 78" fill="none" stroke="#c79a3f" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="0.35" transform="translate(0,3)"/>
+      <rect x="52" y="88" width="96" height="70" rx="6" fill="none" stroke="#0a0f20" stroke-opacity="0.25" stroke-width="1.5"/>
+      <path d="M78 84 L78 60 M122 84 L122 60" stroke="currentColor" stroke-opacity="0.18" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span class="eyebrow">2026 Cycle</span>
+    <h1>Campaign Analytics Hub</h1>
+    <p class="lede">Live dashboards and tools for tracking, forecasting, and understanding the 2026 election cycle — plus a quick guide for each one.</p>
+  </section>
+
+  <h2 class="section-title">Apps</h2>
+
+  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+    </div>
+    <div class="card-body">
+      <h3>Election Forecast</h3>
+      <p>Live election-night simulator across 8+ swing states — win probability, county-level shift, and real-time convergence tracking.</p>
+    </div>
+    <div class="card-actions">
+      <a class="btn btn-primary" href="https://election-forecast-silk.vercel.app" target="_blank" rel="noopener">Open App</a>
+      <a class="btn btn-ghost" href="docs/election-forecast-guide.pdf" target="_blank" rel="noopener">Guide (PDF)</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+    </div>
+    <div class="card-body">
+      <h3>Early-Vote Analysis</h3>
+      <p>Tracks the partisan lean of the early-voting electorate by county, ahead of election day, across 5 swing states.</p>
+    </div>
+    <div class="card-actions">
+      <a class="btn btn-primary" href="https://earlyvote-analysis.vercel.app" target="_blank" rel="noopener">Open App</a>
+      <a class="btn btn-ghost" href="docs/earlyvote-analysis-guide.pdf" target="_blank" rel="noopener">Guide (PDF)</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><circle cx="9" cy="9" r="2"/><circle cx="16" cy="14" r="2"/><path d="M9 11v3M16 12V9"/></svg>
+    </div>
+    <div class="card-body">
+      <h3>Demographic Vote Analysis</h3>
+      <p>Census-based electorate model for GA &amp; NC districts — adjustable turnout &amp; preference sliders, validated against 5 real elections.</p>
+    </div>
+    <div class="card-actions">
+      <a class="btn btn-primary" href="https://demographic-voteanalysis.vercel.app" target="_blank" rel="noopener">Open App</a>
+      <a class="btn btn-ghost" href="docs/demographic-voteanalysis-guide.pdf" target="_blank" rel="noopener">Guide (PDF)</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 4v4"/></svg>
+    </div>
+    <div class="card-body">
+      <h3>Social Media Automation<span class="badge">In adaptation</span></h3>
+      <p>Drop a content file into the shared inbox folder and it's automatically turned into branded posts across Instagram, Facebook, BlueSky &amp; X.</p>
+    </div>
+    <div class="card-actions">
+      <a class="btn btn-primary" href="https://drive.google.com/drive/folders/1Tissidnib3RzJ40Z3N_sU_HxiSaUUYQc" target="_blank" rel="noopener">Open Inbox Folder</a>
+      <a class="btn btn-ghost" href="docs/social-media-automation-guide.pdf" target="_blank" rel="noopener">Guide (PDF)</a>
+    </div>
+  </div>
+
+  <footer>
+    Built for the 2026 election cycle · Links open in a new tab
+  </footer>
+
+</div>
+</body>
+</html>
